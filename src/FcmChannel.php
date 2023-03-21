@@ -2,18 +2,18 @@
 
 namespace NotificationChannels\Fcm;
 
-use Throwable;
-use ReflectionException;
-use Illuminate\Support\Arr;
-use Kreait\Firebase\Messaging\Message;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Events\Dispatcher;
-use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Exception\MessagingException;
-use NotificationChannels\Fcm\Enums\MessageTarget;
-use Illuminate\Notifications\Events\NotificationFailed;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Notifications\Events\NotificationFailed;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Arr;
+use Kreait\Firebase\Exception\MessagingException;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Message;
+use NotificationChannels\Fcm\Enums\MessageTarget;
 use NotificationChannels\Fcm\Exceptions\CouldNotSendNotification;
+use ReflectionException;
+use Throwable;
 
 class FcmChannel
 {
@@ -21,8 +21,6 @@ class FcmChannel
 
     /**
      * FcmChannel constructor.
-     *
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
      */
     public function __construct(protected Dispatcher $events)
     {
@@ -38,7 +36,6 @@ class FcmChannel
      * Send the given notification.
      *
      * @param  mixed  $notifiable
-     * @param  \Illuminate\Notifications\Notification  $notification
      * @return array
      *
      * @throws \NotificationChannels\Fcm\Exceptions\CouldNotSendNotification
@@ -52,7 +49,7 @@ class FcmChannel
 
         $target = $notifiable->routeNotificationTarget();
 
-        if(!$target instanceof MessageTarget){
+        if (! $target instanceof MessageTarget) {
             throw CouldNotSendNotification::unsupportedMessageTarget();
         }
 
@@ -139,8 +136,6 @@ class FcmChannel
     }
 
     /**
-     * @param  \Kreait\Firebase\Messaging\Message  $fcmMessage
-     * @param $token
      * @return array
      *
      * @throws \Kreait\Firebase\Exception\MessagingException
@@ -160,8 +155,6 @@ class FcmChannel
     }
 
     /**
-     * @param $fcmMessage
-     * @param  array  $tokens
      * @return \Kreait\Firebase\Messaging\MulticastSendReport
      *
      * @throws \Kreait\Firebase\Exception\MessagingException
@@ -173,7 +166,6 @@ class FcmChannel
     }
 
     /**
-     * @param $fcmMessage
      * @param  string  $topic
      * @return \Kreait\Firebase\Messaging\MulticastSendReport
      *
@@ -192,12 +184,11 @@ class FcmChannel
 
         return $this->messaging()->send($fcmMessage);
     }
+
     /**
      * Dispatch failed event.
      *
      * @param  mixed  $notifiable
-     * @param  \Illuminate\Notifications\Notification  $notification
-     * @param  \Throwable  $exception
      * @param  string|array  $token
      * @return array|null
      */

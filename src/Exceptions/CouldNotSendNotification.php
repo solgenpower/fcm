@@ -20,12 +20,12 @@ class CouldNotSendNotification extends Exception
 
     public static function invalidMessage()
     {
-        return new static('The toFcm() method only accepts instances of ' . Message::class);
+        return new static('The toFcm() method only accepts instances of '.Message::class);
     }
 
     public static function invalidPropertyInArray($key)
     {
-        return new static('The value of ' . $key . ' must be a string');
+        return new static('The value of '.$key.' must be a string');
     }
 
     public static function invalidTopic()
@@ -35,6 +35,6 @@ class CouldNotSendNotification extends Exception
 
     public static function unsupportedMessageTarget()
     {
-        return new static('The value of routeNotificationTarget method must be an instance of '. MessageTarget::class);
+        return new static('The value of routeNotificationTarget method must be an instance of '.MessageTarget::class);
     }
 }

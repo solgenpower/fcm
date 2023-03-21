@@ -16,7 +16,8 @@
         "guzzlehttp/guzzle": "^7.0",
         "illuminate/notifications": "^9.0|^10.0",
         "illuminate/support": "^9.0|^10.0",
-        "kreait/laravel-firebase": "^5.0"
+        "kreait/laravel-firebase": "^5.0",
+        "laravel/pint": "^1.7"
     },
     "require-dev": {
         "mockery/mockery": "^1.5.1",
@@ -40,7 +41,8 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit",
+        "lint": "vendor/bin/pint"
     },
     "config": {
         "sort-packages": true
