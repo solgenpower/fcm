@@ -19,6 +19,7 @@
         "kreait/laravel-firebase": "^5.0"
     },
     "require-dev": {
+        "laravel/pint": "^1.7",
         "mockery/mockery": "^1.5.1",
         "phpunit/phpunit": "^10.0"
     },
@@ -40,7 +41,8 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit",
+        "lint": "vendor/bin/pint"
     },
     "config": {
         "sort-packages": true
