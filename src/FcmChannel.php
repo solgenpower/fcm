@@ -102,7 +102,7 @@ class FcmChannel
 
     protected function sendToTopic($notifiable, Notification $notification)
     {
-        $topic = $notifiable->routeNotificationForTopic();
+        $topic = $notifiable->routeNotificationFor('fcm', $notification);
 
         if (! is_string($topic) || empty($topic)) {
             throw CouldNotSendNotification::invalidTopic();
