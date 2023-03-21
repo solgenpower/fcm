@@ -5,6 +5,7 @@ namespace NotificationChannels\Fcm\Exceptions;
 use Exception;
 use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Messaging\Message;
+use NotificationChannels\Fcm\Enums\MessageTarget;
 
 class CouldNotSendNotification extends Exception
 {
@@ -27,13 +28,13 @@ class CouldNotSendNotification extends Exception
         return new static('The value of ' . $key . ' must be a string');
     }
 
-    public static function invalidTokenValue()
+    public static function invalidTopic()
     {
-        return new static('The value of topic route must be a string and not empty');
+        return new static('A topic must be a non-empty string');
     }
 
-    public static function invalidMessageTarget($notifiable)
+    public static function unsupportedMessageTarget()
     {
-        return new static($notifiable::class . ' notifiable has an invalid value of routeNotificationAs method');
+        return new static('The value of routeNotificationTarget method must be an instance of '. MessageTarget::class);
     }
 }

@@ -2,18 +2,18 @@
 
 namespace NotificationChannels\Fcm;
 
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Notifications\Events\NotificationFailed;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Arr;
-use Kreait\Firebase\Exception\MessagingException;
-use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\MessageTarget;
-use Kreait\Firebase\Messaging\Message;
-use NotificationChannels\Fcm\Exceptions\CouldNotSendNotification;
-use ReflectionException;
 use Throwable;
+use ReflectionException;
+use Illuminate\Support\Arr;
+use Kreait\Firebase\Messaging\Message;
+use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Events\Dispatcher;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Exception\MessagingException;
+use NotificationChannels\Fcm\Enums\MessageTarget;
+use Illuminate\Notifications\Events\NotificationFailed;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use NotificationChannels\Fcm\Exceptions\CouldNotSendNotification;
 
 class FcmChannel
 {
@@ -46,21 +46,23 @@ class FcmChannel
      */
     public function send($notifiable, Notification $notification)
     {
-        // Defaults to token for now as existing notifiable model does not have this method. This is to avoid breaking of push notification.
+        // Defaults to token for now as existing notifiable model does not have this method.
+        // This is to avoid breaking of push notification.
         // Will remove this once they are converted.
-        $target = $notifiable->routeNotificationTarget() ?? 'token';
 
-        if ($target === MessageTarget::TOKEN) {
-            return $this->sendToToken($notifiable, $notification);
+        $target = $notifiable->routeNotificationTarget();
+
+        if(!$target instanceof MessageTarget){
+            throw CouldNotSendNotification::unsupportedMessageTarget();
         }
 
-        if ($target === MessageTarget::TOPIC) {
+        if ($target === MessageTarget::Topic) {
             return $this->sendToTopic($notifiable, $notification);
         }
 
-        throw CouldNotSendNotification::invalidMessageTarget($notifiable);
+        return $this->sendToToken($notifiable, $notification);
     }
-    
+
     protected function sendToToken($notifiable, Notification $notification)
     {
         $tokens = Arr::wrap($notifiable->routeNotificationFor('fcm', $notification));
@@ -106,7 +108,7 @@ class FcmChannel
         $topic = $notifiable->routeNotificationForTopic();
 
         if (! is_string($topic) || empty($topic)) {
-            throw CouldNotSendNotification::invalidTokenValue();
+            throw CouldNotSendNotification::invalidTopic();
         }
 
         // Get the message from the notification class
@@ -187,7 +189,7 @@ class FcmChannel
         if ($fcmMessage instanceof FcmMessage) {
             $fcmMessage->setTopic($topic);
         }
-        
+
         return $this->messaging()->send($fcmMessage);
     }
     /**
