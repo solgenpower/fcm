@@ -48,13 +48,13 @@ class FcmChannel
     {
         // Defaults to token for now as existing notifiable model does not have this method. This is to avoid breaking of push notification.
         // Will remove this once they are converted.
-        $as = $notifiable->routeNotificationAs() ?? 'token';
+        $target = $notifiable->routeNotificationTarget() ?? 'token';
 
-        if ($as === MessageTarget::TOKEN) {
+        if ($target === MessageTarget::TOKEN) {
             return $this->sendToToken($notifiable, $notification);
         }
 
-        if ($as === MessageTarget::TOPIC) {
+        if ($target === MessageTarget::TOPIC) {
             return $this->sendToTopic($notifiable, $notification);
         }
 
